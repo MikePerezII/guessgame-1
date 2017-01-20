@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <title>JQuery & Cookies</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="cookie.js"></script>
+	<link type="text/css" rel="stylesheet" href="cookies.css">
+	<meta charset="UTF-8">
+    </style>
+</head>
+<body>
+<div id="container">
+<h2>Guess the number from 1 to 100</h2>
+<input type="button" id="clear" value="Clear Player History" onclick="clearCookies();" />
+    <table>
+        <tr><th id="player"><p id="newPlayer">Player:<input type="text" id="pName" /></p></th>
+            <th><input type="button" id="newPlayerSubmit" value="Submit" onclick="setName();" /></th>
+        </tr>
+		<tr><td><div id="msg"></div></td></tr>
+        <tr><td id="feedback"><p>Feedback:</p><div id="highlow"></div></td></tr>
+		<tr id="myGame">
+            <td><p id="guess">Guess:<input type="text" id="pGuess" /></p></td>
+            <td id="playTurns"><p id="turns">0</p></td>
+            <td><input type="button" id="submitGuess" value="Submit Guess" onclick="submitGuess();" /></td>
+        </tr>
+		<tr><td><div id="restart"><input type="button" id="restart" value="Play Again" onclick="restart();" /></div></td></tr>
+    </table>
+
+</body>
+</html>
