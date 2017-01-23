@@ -4,8 +4,8 @@
 <head>
     <title>Javascript Pinball</title>
     <script script type="text/javascript" src="guess.js"></script>
+    <script src="../js/jquery.js"></script>
     <link type="text/css" rel="stylesheet" href="guess.css">
-    </style>
 </head>
 <body onload="checkGame()">
 <script>
@@ -15,7 +15,11 @@
     setInterval(refreshClock, 1000);
     var playerOne = new player();
     alert("New PlayerOne Created");
+    $(document).ready(function() {
+        $('#myContent').html('Hello World');
+    });
 </script>
+<h1 id="myContent">Testing jQuery</h1>
 <div id="container">
 <input type="button" id="clear" value="Clear Local Storage" onclick="localStorage.clear();" />
     <table>
@@ -23,7 +27,7 @@
             <th id="clock"><p id="timer">Clock</p></th>
             <th><input type="button" id="submitName" value="Start Game" onclick="getName(playerOne);" /></th>
         </tr>
-        <tr><td id="feedback"><p id="highlow">Guess Feedback</p></td>
+        <tr><td id="feedback"><p id="highLow">Guess Feedback</p></td>
         </tr>
         <tr>
             <td id="game"><p id="guess">Guess:<input type="text" id="pGuess" /></p></td>
