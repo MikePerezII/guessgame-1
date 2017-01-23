@@ -6,18 +6,26 @@ function getRandomInt(min,max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function initialize() {
+function checkGame() {
     //If there is web storage data, remove submit button and process
     var storedPlayer = localStorage.getItem("playerOne");
     if (storedPlayer !==null) {
         storedPlayer=JSON.parse(storedPlayer);
         playerOne.playerize(storedPlayer);
-        secondGame(playerOne);
+        playGame(playerOne);
     }
     else {
+        // otherwise wait for getName - submit new name
         alert("First Game! Enter name, press Start Game.");
     }
-    // otherwise wait for submit of new name
+}
+
+function playGame(player) {
+    hideID("submitName");
+    gamesLength = player.games.length+1;
+    welcomeText = "Game "+gamesLength+" on, "+player.name+"!";
+     /* replace input box with welcome */
+    replacer("player","p","playName",welcomeText,"bigtext");
 }
 
 function getName(player) {
@@ -174,11 +182,3 @@ function endGame(player) {
     }
 }
 
-
-function secondGame(player) {
-    hideID("submitName");
-    gamesLength = player.games.length+1;
-    welcomeText = "Game "+gamesLength+" on, "+player.name+"!";
-     /* replace input box with welcome */
-    replacer("player","p","playName",welcomeText,"bigtext");
-}
