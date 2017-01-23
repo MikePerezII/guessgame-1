@@ -6,40 +6,6 @@ function getRandomInt(min,max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function checkGame() {
-    //If there is web storage data, remove submit button and process
-    var storedPlayer = localStorage.getItem("playerOne");
-    if (storedPlayer !==null) {
-        storedPlayer=JSON.parse(storedPlayer);
-        playerOne.playerize(storedPlayer);
-        playGame(playerOne);
-    }
-    else {
-        // otherwise wait for getName - submit new name
-        alert("First Game! Enter name, press Start Game.");
-    }
-}
-
-function playGame(player) {
-    hideID("submitName");
-    gamesLength = player.games.length+1;
-    welcomeText = "Game "+gamesLength+" on, "+player.name+"!";
-     /* replace input box with welcome */
-    replacer("player","p","playName",welcomeText,"bigtext");
-}
-
-function getName(player) {
-    /* obtain name from input box, hide submit button */
-    var nameEntered = document.getElementById('pName');
-    var pName = trim(nameEntered.value);
-    hideID("submitName");
-    player.setName(pName);
-    welcomeText = "Game Is On, "+player.name+"!";
-     /* replace input box with welcome */
-    replacer("player","p","playName",welcomeText,"bigtext");
-}
-
-
 function hideID(hsid) {
     var target = document.getElementById(hsid);
     var vis = target.style;
@@ -55,7 +21,7 @@ function player() {
     this.playerize = function(storedPlayer) {
         /* convert strings to numbers */
         this.name = storedPlayer.name;
-        for(var i = 0; i < storedPlayer.games.length; i++ ){
+        for(var i = 0; i < storedPlayer.games.length; i++){
             this.games[i] = Number(storedPlayer.games[i]);
         }
         this.avgGuess = Number(storedPlayer.avgGuess);
@@ -71,7 +37,7 @@ function player() {
     this.avgGuessCount = function() {
         /* calculate average based on pushed values */
         var sum = 0;
-        for( var i = 0; i < this.games.length; i++ ){
+        for(var i = 0; i < this.games.length; i++){
             sum += this.games[i];
         }
         this.avgGuess = sum/this.games.length;
@@ -84,12 +50,12 @@ function trim(str) {
 
 /* timer */
 function printTime() {
-        var d = new Date();
-        var hours = d.getHours();
-        var mins = d.getMinutes();
-        var secs = d.getSeconds();
-        var timenow = hours+":"+mins+":"+secs;;
-        return timenow;
+    var d = new Date();
+    var hours = d.getHours();
+    var mins = d.getMinutes();
+    var secs = d.getSeconds();
+    var timenow = hours+":"+mins+":"+secs;;
+    return timenow;
 }
 
 function refreshClock() {
@@ -122,49 +88,75 @@ function replacer(pid,cElem,cid,newText,newid) {
 
 /* LINEAR PROCESS */
 
-function newGuess(player) {
-    turns ++;
-    player=player;
-    var currentGuess = document.getElementById('pGuess').value;
-    replacer("guess","input","pGuess","","pGuess");
-    replacer("playTurns","p","turns",turns,"turns");
-    if (currentGuess == correctNumber) {
-        hideID("submitGuess");
-        hideID("highlow");
-        player.addGame(turns);
-        player.avgGuessCount();
-        alert("Correct guess, "+player.name+"! In "+turns+" turns.");
-        endGame(player);
+function checkGame() {
+    //If there is web storage data, remove submit button and process
+    var storedPlayer = localStorage.getItem("playerOne");
+    if (storedPlayer !==null) {
+        storedPlayer=JSON.parse(storedPlayer);
+        playerOne.playerize(storedPlayer);
+        playGame(playerOne);
     }
     else {
-        if (isNaN(currentGuess) !== true) {
-            if (currentGuess==999) {alert(correctNumber);}
-            testGuess(currentGuess,correctNumber);
-        }
-        else {
-            alert("Game ended per user input.");
-        }
+        // otherwise wait for getName - submit new name
+        alert("First Game! Enter name, press Start Game.");
     }
 }
 
-/* Modified ELI */
+function getName(player) {
+    /* obtain name from input box, hide submit button */
+    var nameEntered = document.getElementById('pName');
+    var pName = trim(nameEntered.value);
+    hideID("submitName");
+    player.setName(pName);
+    welcomeText = "Game Is On, "+player.name+"! Enter your first guess.";
+     /* replace input box with welcome */
+    replacer("player","p","playName",welcomeText,"bigtext");
+}
 
-function testGuess(guess,answer) {
-    var currentGuess = guess;
-    var correctNumber = answer;
-    if (currentGuess > correctNumber) {
-        feedback="Hint: Try a lower number!";
-        fbcolor="red";
-    }
+function playGame(player) {
+    /* Welcomes player by name and game number, waits for guess. */
+    hideID("submitName");
+    gamesLength = player.games.length+1;
+    welcomeText = "Game "+gamesLength+" on, "+player.name+"! Enter your first guess.";
+     /* replace input box with welcome */
+    replacer("player","p","playName",welcomeText,"bigtext");
+}
+
+function newGuess(player,correct) {
+    turns ++;
+    var guess = document.getElementById('pGuess').value;
+    replacer("guess","input","pGuess","","pGuess");
+    replacer("playTurns","p","turns",turns,"turns");
+    if (isNaN(guess) !== true) {
+        if (guess==correct) { 
+                /* store game statistics */
+                hideID("submitGuess");
+                hideID("highlow");
+                player.addGame(turns);
+                player.avgGuessCount();
+                alert("Correct guess, "+player.name+"! In "+turns+" turns.");
+                endGame(player);
+            }
+        else if (guess>correct) { 
+            feedback="Hint: Try a lower number!";
+            fbcolor="red";
+            if (guess==999) {
+                /* Shortcut */
+                alert("Correct Number is "+correctNumber);
+            }
+        }
+        else {
+                feedback="Hint: Try a higher number!";
+                fbcolor="green";
+        }
+        replacer("feedback","p","highlow",feedback,"highlow");
+        var target = document.getElementById("highlow");
+        var fbstyle = target.style;
+        fbstyle.color=fbcolor;
+        }
     else {
-        feedback="Hint: Try a higher number!";
-        fbcolor="green";
+        alert("Game ended per user input.");
     }
-    replacer("feedback","p","highlow",feedback,"highlow");
-    var target = document.getElementById("highlow");
-    var fbstyle = target.style;
-    fbstyle.color=fbcolor;
-    /* Style changer use http://www.w3schools.com/jsref/dom_obj_style.asp */
 }
 
 function endGame(player) {
@@ -172,7 +164,7 @@ function endGame(player) {
     alert("Your average over "+gamesLength+" games is now "+player.avgGuess+".");
     var playAgain = 'y';
     playAgain = prompt("Would you like to play again? (y or n)");
-    if (playAgain =="y") {
+    if (playAgain ==="y") {
         /* set web storage using JSON */
         localStorage.setItem("playerOne", JSON.stringify(player));
         window.location.reload();
@@ -181,4 +173,3 @@ function endGame(player) {
         alert("Hope you had fun!");
     }
 }
-
