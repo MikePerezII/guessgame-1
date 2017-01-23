@@ -6,13 +6,6 @@ function getRandomInt(min,max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function hideID(hsid) {
-    var target = document.getElementById(hsid);
-    var vis = target.style;
-    /* Style changer use http://www.w3schools.com/jsref/dom_obj_style.asp */
-    vis.display="none";
-}
-
 function player() {
     /* create player object */
     this.name = "";
@@ -59,16 +52,7 @@ function printTime() {
 }
 
 function refreshClock() {
-    // create replacement element
-    var p=document.createElement("p");
-    var node = document.createTextNode(printTime());
-    p.appendChild(node);
-    // define target
-    var parent = document.getElementById("clock");
-    var child = document.getElementById("timer");
-    // replace element
-    parent.replaceChild(p,child);
-    p.setAttribute("id", "timer");
+    $("#clock p").replaceWith("<p>"+printTime()+"</p>");
 }
 
 /* Generic replacer */
@@ -106,7 +90,7 @@ function getName(player) {
     /* obtain name from input box, hide submit button */
     var nameEntered = document.getElementById('pName');
     var pName = trim(nameEntered.value);
-    hideID("submitName");
+    $("#submitName").hide();
     player.setName(pName);
     welcomeText = "Game Is On, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
@@ -115,7 +99,7 @@ function getName(player) {
 
 function playGame(player) {
     /* Welcomes player by name and game number, waits for guess. */
-    hideID("submitName");
+    $("#submitName").hide();
     gamesLength = player.games.length+1;
     welcomeText = "Game "+gamesLength+" on, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
@@ -130,8 +114,8 @@ function newGuess(player,correct) {
     if (isNaN(guess) !== true) {
         if (guess==correct) { 
                 /* store game statistics */
-                hideID("submitGuess");
-                hideID("highlow");
+                $("#submitGuess").hide();
+                $("#highLow").hide();
                 player.addGame(turns);
                 player.avgGuessCount();
                 alert("Correct guess, "+player.name+"! In "+turns+" turns.");
