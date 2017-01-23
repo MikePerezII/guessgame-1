@@ -12,10 +12,12 @@
     var turns = 0;
     var guessAgain = 1;
     var correctNumber = getRandomInt(1,100);
-    var playerOne = new player();
     setInterval(refreshClock, 1000);
+    var playerOne = new player();
+    alert("New PlayerOne Created");
 </script>
 <div id="container">
+<input type="button" id="clear" value="Clear Local Storage" onclick="localStorage.clear();" />
     <table>
         <tr><th id="player"><p id="playName">Player:<input type="text" id="pName" /></p></th>
             <th id="clock"><p id="timer">Clock</p></th>
@@ -29,5 +31,6 @@
             <td><input type="button" id="submitGuess" value="Submit Guess" onclick="newGuess(playerOne);" /></td>
         </tr>
     </table>
+
 </body>
 </html>

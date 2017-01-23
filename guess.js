@@ -8,19 +8,24 @@ function getRandomInt(min,max) {
 
 function initialize() {
     //If there is web storage data, remove submit button and process
-    if (typeof playerOne != 'undefined') {
-        secondGame();
+    var storedPlayer = localStorage.getItem("playerOne");
+    if (storedPlayer !==null) {
+        storedPlayer=JSON.parse(storedPlayer);
+        playerOne.playerize(storedPlayer);
+        secondGame(playerOne);
+    }
+    else {
+        alert("First Game! Enter name, press Start Game.");
     }
     // otherwise wait for submit of new name
 }
 
 function getName(player) {
     /* obtain name from input box, hide submit button */
-    var playerOne=player;
     var nameEntered = document.getElementById('pName');
     var pName = trim(nameEntered.value);
     hideID("submitName");
-    playerOne.setName(pName);
+    player.setName(pName);
     welcomeText = "Game Is On, "+player.name+"!";
      /* replace input box with welcome */
     replacer("player","p","playName",welcomeText,"bigtext");
@@ -37,13 +42,21 @@ function hideID(hsid) {
 function player() {
     /* create player object */
     this.name = "";
-    this.games = []; /* Create empty array */
+    this.games = []; /* Create array */
     this.avgGuess=0;
+    this.playerize = function(storedPlayer) {
+        /* convert strings to numbers */
+        this.name = storedPlayer.name;
+        for(var i = 0; i < storedPlayer.games.length; i++ ){
+            this.games[i] = Number(storedPlayer.games[i]);
+        }
+        this.avgGuess = Number(storedPlayer.avgGuess);
+    }
     this.setName = function(name) {
         myName=name;
         this.name = myName;
     }
-    this.addGame = function() {
+    this.addGame = function(turns) {
         this.games.push(turns);
         /* add number of turns to games array */
     }
@@ -101,23 +114,23 @@ function replacer(pid,cElem,cid,newText,newid) {
 
 /* LINEAR PROCESS */
 
-function newGuess() {
+function newGuess(player) {
     turns ++;
+    player=player;
     var currentGuess = document.getElementById('pGuess').value;
     replacer("guess","input","pGuess","","pGuess");
     replacer("playTurns","p","turns",turns,"turns");
     if (currentGuess == correctNumber) {
-        alert("CORRECT!");
-        replacer("game","p","guess","Turns it took you: ","bigtext");
-        replacer("playTurns","p","turns",turns,"bigtext");
         hideID("submitGuess");
         hideID("highlow");
-        playerOne.addGame();
-        playerOne.avgGuessCount();
-        endGame(playerOne);
+        player.addGame(turns);
+        player.avgGuessCount();
+        alert("Correct guess, "+player.name+"! In "+turns+" turns.");
+        endGame(player);
     }
     else {
         if (isNaN(currentGuess) !== true) {
+            if (currentGuess==999) {alert(correctNumber);}
             testGuess(currentGuess,correctNumber);
         }
         else {
@@ -146,15 +159,14 @@ function testGuess(guess,answer) {
     /* Style changer use http://www.w3schools.com/jsref/dom_obj_style.asp */
 }
 
-function endGame(playerOne) {
-    alert("Congratulations!");
-    alert("You took "+playerOne.games[playerOne.games.length-1]+" turns to win.");
+function endGame(player) {
+    gamesLength = player.games.length;
+    alert("Your average over "+gamesLength+" games is now "+player.avgGuess+".");
     var playAgain = 'y';
-    alert(playerOne.name+", your average over "+playerOne.games.length-1+" games = "+playerOne.avgGuess);
     playAgain = prompt("Would you like to play again? (y or n)");
     if (playAgain =="y") {
         /* set web storage using JSON */
-        localStorage.setItem('myObject', JSON.stringify(playerOne));
+        localStorage.setItem("playerOne", JSON.stringify(player));
         window.location.reload();
         }
     else {
@@ -163,15 +175,10 @@ function endGame(playerOne) {
 }
 
 
-function secondGame() {
-    hideID();
-    /* read player name from web storage */
-    var playerOne = JSON.parse(localStorage.getItem('playerOne'));
-    alert('retrievedObject: ', JSON.parse(retrievedObject));
-    gameNum = playerOne.games.length + 1;
-    playerName = playerOne.playerName;
-    var welcomeText = "Game "+gameNum+" on, "+playerName+"!";
-    /* replace input box with welcome */
+function secondGame(player) {
+    hideID("submitName");
+    gamesLength = player.games.length+1;
+    welcomeText = "Game "+gamesLength+" on, "+player.name+"!";
+     /* replace input box with welcome */
     replacer("player","p","playName",welcomeText,"bigtext");
-    playGame(playerOne);
 }
