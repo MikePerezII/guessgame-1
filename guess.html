@@ -4,8 +4,8 @@
 <head>
     <title>Javascript Pinball</title>
     <script script type="text/javascript" src="guess.js"></script>
-    <!--<script src="../js/jquery.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="../js/jquery.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>-->
     <link type="text/css" rel="stylesheet" href="guess.css">
 </head>
 <body onload="checkGame()">
@@ -13,14 +13,16 @@
     <h1 id="myContent">Testing jQuery</h1>
     <input type="button" id="clear" value="Clear Local Storage" onclick="localStorage.clear();" />
     <table>
-        <tr><th id="player"><p>Player:<input type="text" id="pName" /></p></th>
+        <tr>
+            <th id="player"><p>Player:<input type="text" id="pName" /></p></th>
             <th id="clock"><p>Clock</p></th>
             <th><input type="button" id="submitName" value="Start Game" onclick="getName(playerOne);" /></th>
         </tr>
-        <tr><td id="feedback"><p id="highLow">Guess Feedback</p></td>
+        <tr>
+            <td id="feedback"><p id="highLow">Guess Feedback</p></td>
         </tr>
         <tr>
-            <td id="game"><p>Guess:<input type="text" id="pGuess" /></p></td>
+            <td id="game">Guess:<input type="text" id="pGuess" /></td>
             <td id="playTurns"><p>0</p></td>
             <td><input type="button" id="submitGuess" value="Submit Guess" onclick="newGuess(playerOne,correctNumber);" /></td>
         </tr>
