@@ -9,20 +9,9 @@
     <link type="text/css" rel="stylesheet" href="guess.css">
 </head>
 <body onload="checkGame()">
-<script>
-    var turns = 0;
-    var guessAgain = 1;
-    var correctNumber = getRandomInt(1,100);
-    setInterval(refreshClock, 1000);
-    var playerOne = new player();
-    alert("New PlayerOne Created");
-    $(document).ready(function() {
-        $('#myContent').html('Hello World');
-    });
-</script>
-<h1 id="myContent">Testing jQuery</h1>
 <div id="container">
-<input type="button" id="clear" value="Clear Local Storage" onclick="localStorage.clear();" />
+    <h1 id="myContent">Testing jQuery</h1>
+    <input type="button" id="clear" value="Clear Local Storage" onclick="localStorage.clear();" />
     <table>
         <tr><th id="player"><p id="playName">Player:<input type="text" id="pName" /></p></th>
             <th id="clock"><p id="timer">Clock</p></th>
@@ -36,6 +25,5 @@
             <td><input type="button" id="submitGuess" value="Submit Guess" onclick="newGuess(playerOne,correctNumber);" /></td>
         </tr>
     </table>
-
 </body>
 </html>
