@@ -56,8 +56,10 @@ function refreshClock() {
 }
 
 /* Generic replacer */
-function replacer(pid,cElem,newText) {
-    $('#'+ pid + ' '+cElem).replaceWith("<"+cElem+">"+newText+"</"+cElem+">");
+function replacer(pid,newText) {
+    var parent = document.getElementById(pid);
+    var child = parent.firstElementChild.nodeName;
+    $('#'+ pid).children().first().replaceWith("<"+child+">"+newText+"<\/"+child+">");
 }
 
 /* LINEAR PROCESS */
@@ -91,7 +93,7 @@ function getName(player) {
     player.setName(pName);
     welcomeText = "Game Is On, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
-    replacer("player","p",welcomeText);
+    replacer("player",welcomeText);
 }
 
 function playGame(player) {
@@ -100,14 +102,15 @@ function playGame(player) {
     gamesLength = player.games.length+1;
     welcomeText = "Game "+gamesLength+" on, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
-    replacer("player","p",welcomeText);
+    replacer("player",welcomeText);
 }
 
 function newGuess(player,correct) {
     turns ++;
-    var guess = document.getElementById('pGuess').value;
-    replacer("guess","input","");
-    replacer("playTurns","p",turns);
+    var parent = document.getElementById('game');
+    var guess = parent.firstElementChild.value;
+    replacer("game","");
+    replacer("playTurns",turns);
     if (isNaN(guess) !== true) {
         if (guess==correct) { 
                 /* store game statistics */
@@ -127,10 +130,10 @@ function newGuess(player,correct) {
             }
         }
         else {
-                feedback="Hint: Try a higher number!";
-                fbcolor="green";
+            feedback="Hint: Try a higher number!";
+            fbcolor="green";
         }
-        replacer("feedback","p",feedback);
+        replacer("feedback",feedback);
         $("#feedback p").attr('style','color:'+fbcolor+";");
         }
     else {
