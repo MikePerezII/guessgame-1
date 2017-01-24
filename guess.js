@@ -56,23 +56,20 @@ function refreshClock() {
 }
 
 /* Generic replacer */
-function replacer(pid,cElem,cid,newText,newid) {
-    // create replacement element
-    var nElem=document.createElement(cElem);
-    var nNode = document.createTextNode(newText);
-    nElem.appendChild(nNode);
-    nElem.setAttribute("id",newid);
-    // define target
-    var parent = document.getElementById(pid);
-    var child = document.getElementById(cid);
-    // replace element
-    parent.replaceChild(nElem,child);
-    // re-assign ID
+function replacer(pid,cElem,newText) {
+    $('#'+ pid + ' '+cElem).replaceWith("<"+cElem+">"+newText+"</"+cElem+">");
 }
 
 /* LINEAR PROCESS */
 
 function checkGame() {
+    window.turns = 0;
+    $(document).ready(function() {
+        $('#myContent').html('Hello World');
+    });
+    window.correctNumber = getRandomInt(1,100);
+    setInterval(refreshClock, 1000);
+    window.playerOne = new player();
     //If there is web storage data, remove submit button and process
     var storedPlayer = localStorage.getItem("playerOne");
     if (storedPlayer !==null) {
@@ -94,7 +91,7 @@ function getName(player) {
     player.setName(pName);
     welcomeText = "Game Is On, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
-    replacer("player","p","playName",welcomeText,"bigtext");
+    replacer("player","p",welcomeText);
 }
 
 function playGame(player) {
@@ -103,14 +100,14 @@ function playGame(player) {
     gamesLength = player.games.length+1;
     welcomeText = "Game "+gamesLength+" on, "+player.name+"! Enter your first guess.";
      /* replace input box with welcome */
-    replacer("player","p","playName",welcomeText,"bigtext");
+    replacer("player","p",welcomeText);
 }
 
 function newGuess(player,correct) {
     turns ++;
     var guess = document.getElementById('pGuess').value;
-    replacer("guess","input","pGuess","","pGuess");
-    replacer("playTurns","p","turns",turns,"turns");
+    replacer("guess","input","");
+    replacer("playTurns","p",turns);
     if (isNaN(guess) !== true) {
         if (guess==correct) { 
                 /* store game statistics */
@@ -133,10 +130,8 @@ function newGuess(player,correct) {
                 feedback="Hint: Try a higher number!";
                 fbcolor="green";
         }
-        replacer("feedback","p","highlow",feedback,"highlow");
-        var target = document.getElementById("highlow");
-        var fbstyle = target.style;
-        fbstyle.color=fbcolor;
+        replacer("feedback","p",feedback);
+        $("#feedback p").attr('style','color:'+fbcolor+";");
         }
     else {
         alert("Game ended per user input.");
